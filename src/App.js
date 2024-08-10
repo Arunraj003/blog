@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import BlogList from './components/BlogList';
+import BlogPost from './components/BlogPost';
+import NewPost from './components/NewPost';
 import './App.css';
 
 function App() {
+  
+  const [posts, setPosts] = useState([]);
+  const [currentPost, setCurrentPost] = useState(null);
+
+  const handleAddPost = (newPost) => {
+    setPosts([...posts, newPost]);
+  };
+
+  const handlePostClick = (index) => {
+    setCurrentPost(posts[index]);
+  };
+
+  const handleBack = () => {
+    setCurrentPost(null);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {currentPost ? (
+        <BlogPost post={currentPost} 
+        onBack={handleBack} />
+      ) : (
+        <>
+          <NewPost onAddPost={handleAddPost} />
+          <BlogList posts={posts} onPostClick={handlePostClick} />
+        </>
+      )}
     </div>
   );
 }
